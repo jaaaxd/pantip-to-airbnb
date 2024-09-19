@@ -1,4 +1,7 @@
-export const forums = [{
+export const forums: {
+  name: string;
+  icon: string;
+}[] = [{
   name: 'Sinthon',
   icon: '/assets/icons/chart.svg',
 }, {

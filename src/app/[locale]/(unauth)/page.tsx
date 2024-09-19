@@ -18,10 +18,9 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 
 export default function Index(props: { params: { locale: string } }) {
   unstable_setRequestLocale(props.params.locale);
-  // const t = useTranslations('Index');
 
   return (
-    <div className="flex flex-col items-center px-10 pb-4">
+    <div className="flex flex-col items-center px-14 pb-14">
       <Navbar />
       <Search />
       <Topic />
