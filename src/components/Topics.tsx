@@ -24,22 +24,22 @@ export const Topic: React.FC<TopicProps> = ({ query }) => {
     <>
       <div className="topic-bar m-6 mb-5 flex w-full gap-8 overflow-y-auto overscroll-y-none border-t py-5">
         {forums.map((forum, index) => (
-          <div
+          <button
             key={index}
+            onClick={() => setActiveForum(forum.name)}
             className={`forum-item flex w-fit cursor-pointer flex-col items-center focus-within:border-b-2 focus-within:border-black hover:border-b-2  focus:border-black active:border-black ${
               activeForum === forum.name ? 'border-b-2 border-black' : ''
             }`}
           >
             <img src={forum.icon} alt={`${forum.name} icon`} className="forum-icon m-2 w-5" />
-            <button
+            <div
               className={`text-nowrap pb-1 text-sm font-normal text-secondary-100 hover:text-secondary-200 focus:text-secondary-200 ${
                 activeForum === forum.name ? 'text-secondary-200' : 'hover:border-border'
               }`}
-              onClick={() => setActiveForum(forum.name)}
             >
               {forum.name}
-            </button>
-          </div>
+            </div>
+          </button>
         ))}
       </div>
 

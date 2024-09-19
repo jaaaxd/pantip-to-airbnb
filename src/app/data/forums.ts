@@ -14,7 +14,7 @@ export const forums: {
   name: 'Camera',
   icon: '/assets/icons/camera.svg',
 }, {
-  name: 'Klaibann',
+  name: 'Klai Bann',
   icon: '/assets/icons/map.svg',
 }, {
   name: 'Ratchada',
