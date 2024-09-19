@@ -8,6 +8,7 @@ import { DemoBadge } from '@/components/DemoBadge';
 import { AppConfig } from '@/utils/AppConfig';
 
 export const metadata: Metadata = {
+  title: 'Pantip',
   icons: [
     {
       rel: 'apple-touch-icon',

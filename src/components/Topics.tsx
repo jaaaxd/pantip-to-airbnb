@@ -4,8 +4,21 @@ import { useState } from 'react';
 
 import { forums } from '@/app/data/forums';
 
-export const Topic = () => {
+type TopicProps = {
+  query: string;
+};
+
+export const Topic: React.FC<TopicProps> = ({ query }) => {
   const [activeForum, setActiveForum] = useState(forums[0]?.name);
+
+  const sampleTopics = [...Array(10)].map((_, i) => ({
+    id: i + 1,
+    name: `Topic ${i + 1}`, // Example topic names
+  }));
+
+  const filteredTopics = sampleTopics.filter(topic =>
+    topic.name.toLowerCase().includes(query.toLowerCase()),
+  );
 
   return (
     <>
@@ -30,23 +43,31 @@ export const Topic = () => {
         ))}
       </div>
 
-      <div className="topics-container felx-col flex w-[70%] flex-col border-b border-b-border">
+      <div className="topics-container flex w-[70%] flex-col border-b border-b-border">
 
-        {[...Array(10)].map((_, i) => (
-          <a
-            href={`/topic/${i + 1}`}
-            key={i}
-            className="topic cursor-pointer border-t border-t-border px-10 py-4 text-secondary-200 hover:bg-[#FFF5F7] hover:text-primary"
-          >
-            {activeForum}
-            {' '}
-            forum
-            {' '}
-            topic
-            {' '}
-            {i + 1}
-          </a>
-        ))}
+        {filteredTopics.length > 0
+          ? (
+              filteredTopics.map(topic => (
+                <a
+                  href={`/topic/${topic.id}`}
+                  key={topic.id}
+                  className="topic cursor-pointer border-t border-t-border px-10 py-4 text-secondary-200 hover:bg-[#FFF5F7] hover:text-primary"
+                >
+                  {activeForum}
+                  {' '}
+                  forum
+                  {' '}
+                  topic
+                  {' '}
+                  {topic.id}
+                </a>
+              ))
+            )
+          : (
+              <div className="topic px-10 py-4 text-secondary-200">
+                No topics match your query.
+              </div>
+            )}
       </div>
     </>
   );
