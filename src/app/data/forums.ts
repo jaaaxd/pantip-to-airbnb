@@ -2,6 +2,12 @@ export const forums: {
   name: string;
   icon: string;
 }[] = [{
+  name: 'Hot Topic',
+  icon: '/assets/icons/hot.svg',
+}, {
+  name: 'Pantip Pick',
+  icon: '/assets/icons/fav.svg',
+}, {
   name: 'Sinthon',
   icon: '/assets/icons/chart.svg',
 }, {

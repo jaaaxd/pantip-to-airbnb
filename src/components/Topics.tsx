@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { forums } from '@/app/data/forums';
 
@@ -10,6 +10,7 @@ type TopicProps = {
 
 export const Topic: React.FC<TopicProps> = ({ query }) => {
   const [activeForum, setActiveForum] = useState(forums[0]?.name);
+  const [loading, setLoading] = useState(true);
 
   const sampleTopics = [...Array(10)].map((_, i) => ({
     id: i + 1,
@@ -19,6 +20,25 @@ export const Topic: React.FC<TopicProps> = ({ query }) => {
   const filteredTopics = sampleTopics.filter(topic =>
     topic.name.toLowerCase().includes(query.toLowerCase()),
   );
+
+  const [scrapedTitles, setScrapedTitles] = useState<string[]>([]);
+
+  useEffect(() => {
+    async function fetchScrapedTitles() {
+      try {
+        const response = await fetch('/api/scraper');
+        const data = await response.json();
+        setScrapedTitles(data.titles);
+        setLoading(false);
+      } catch (error) {
+        console.error('Failed to fetch scraped titles:', error);
+      }
+    }
+
+    fetchScrapedTitles();
+  }, []);
+
+  // console.log(scrapedTitles);
 
   return (
     <>
@@ -42,33 +62,49 @@ export const Topic: React.FC<TopicProps> = ({ query }) => {
           </button>
         ))}
       </div>
+      { loading
+        ? <div className="text-secondary-100">Loading ...</div>
+        : (
+            <div className="topics-container flex w-full flex-col border-b border-b-border md:w-[70%]">
 
-      <div className="topics-container flex w-[70%] flex-col border-b border-b-border">
-
-        {filteredTopics.length > 0
-          ? (
-              filteredTopics.map(topic => (
-                <a
-                  href={`/topic/${topic.id}`}
-                  key={topic.id}
-                  className="topic cursor-pointer border-t border-t-border px-10 py-4 text-secondary-200 hover:bg-[#FFF5F7] hover:text-primary"
-                >
-                  {activeForum}
-                  {' '}
-                  forum
-                  {' '}
-                  topic
-                  {' '}
-                  {topic.id}
-                </a>
-              ))
-            )
-          : (
-              <div className="topic px-10 py-4 text-secondary-200">
-                No topics match your query.
-              </div>
-            )}
-      </div>
+              {filteredTopics.length > 0
+                ? activeForum === 'Hot Topic'
+                  ? (
+                      scrapedTitles.map((topic, i) => (
+                        <a
+                          href="/topic/1"
+                          key={i}
+                          className="topic flex cursor-pointer gap-3 border-t border-t-border px-10 py-4 text-secondary-200 hover:bg-[#FFF5F7] hover:text-primary"
+                        >
+                          <img src="/assets/icons/topic.svg" alt="topic" className="w-6"></img>
+                          {topic}
+                        </a>
+                      ))
+                    )
+                  : (
+                      filteredTopics.map(topic => (
+                        <a
+                          href={`/topic/${topic.id}`}
+                          key={topic.id}
+                          className="topic cursor-pointer border-t border-t-border px-10 py-4 text-secondary-200 hover:bg-[#FFF5F7] hover:text-primary"
+                        >
+                          {activeForum}
+                          {' '}
+                          forum
+                          {' '}
+                          topic
+                          {' '}
+                          {topic.id}
+                        </a>
+                      ))
+                    )
+                : (
+                    <div className="topic px-10 py-4 text-secondary-200">
+                      No topics match your query.
+                    </div>
+                  )}
+            </div>
+          ) }
     </>
   );
 };
